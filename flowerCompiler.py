@@ -234,7 +234,7 @@ import sys
 file=open(sys.argv[0],'r')
 c.strInput(code)
 #print(c.code)
-for i in range(sys.argv[1]):
+for i in range(int(sys.argv[1])):
   c.HeadHunter()
   c.HeadPiler()
   c.BuildFun()
