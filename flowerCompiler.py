@@ -11,6 +11,7 @@ class flowerLang:
   isOpsControlled:int=0
   isHeader:bool=False
   isTail:bool=False
+  endflower:bool=False
   def __init__(self):
     return None
   def initPilerInst(self):
@@ -142,6 +143,8 @@ class flowerLang:
       self.cResultL.append(self.funDec)
     #print(self.funDec)
     #print(self.loader)
+    if self.funName=="endflower" and self.args=="exit":
+      self.endflower=True
   def r2v(self): # return to value
     #print(self.headL)
     if len(self.headL)>2:
@@ -238,14 +241,13 @@ else:
   c.regInput(file.readlines())
 #print(c.code)
 output:str=""
-while output=="":
-  for i in range(int(sys.argv[2])):
-    c.HeadHunter()
-    c.HeadPiler()
-    c.BuildFun()
-    c.conFlow()
-    c.r2v()
-    c.cLineIdx+=1
-  output='\n'.join(c.cResultL[:-1])
+while c.endflower==False:
+  c.HeadHunter()
+  c.HeadPiler()
+  c.BuildFun()
+  c.conFlow()
+  c.r2v()
+  c.cLineIdx+=1
+output='\n'.join(c.cResultL[:-1])
 output+='\n'+"main()"
 print(output)
