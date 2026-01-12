@@ -239,7 +239,7 @@ else:
 #print(c.code)
 output:str=""
 while output=="":
-  for i in range(1):
+  for i in range(int(sys.argv[2])):
     c.HeadHunter()
     c.HeadPiler()
     c.BuildFun()
