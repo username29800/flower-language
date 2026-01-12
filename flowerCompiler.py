@@ -1,3 +1,4 @@
+import sys
 class flowerLang:
   cLineIdx:int=0 # current line index
   cResultL:list=[] # resulting python code lines
@@ -181,7 +182,21 @@ class flowerLang:
       #print(self.headL)
       if ops in [1,2]:
         self.loader.append(" "*(self.funIndent)+f"  while {self.headL[ops+1]}:")
-
+  def compiler(self):
+    output:str=""
+    file=open(sys.argv[1],'r').readlines()
+    self.regInput(file)
+    while self.endflower==False:
+      self.HeadHunter()
+      self.HeadPiler()
+      self.BuildFun()
+      self.conFlow()
+      self.r2v()
+      self.cLineIdx+=1
+    output='\n'.join(self.cResultL[:-1])
+    output+='\n'+"main()"
+    print(output)
+    return output
 
 # flower 0.7 transpiler
 c=flowerLang()
@@ -233,6 +248,7 @@ code='''
 
 ()end
 '''
+'''
 import sys
 if sys.argv=="default-test":
   c.strInput(code)
@@ -251,3 +267,5 @@ while c.endflower==False:
 output='\n'.join(c.cResultL[:-1])
 output+='\n'+"main()"
 print(output)
+'''
+c.compiler()
