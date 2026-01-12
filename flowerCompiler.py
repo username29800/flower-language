@@ -243,4 +243,3 @@ for i in range(sys.argv[1]):
   c.cLineIdx+=1
 print('\n'.join(c.cResultL[:-1]))
 print("main()")
-
