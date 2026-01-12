@@ -231,10 +231,10 @@ code='''
 ()end
 '''
 import sys
-file=open(sys.argv[0],'r')
+file=open(sys.argv[1],'r')
 c.strInput(code)
 #print(c.code)
-for i in range(int(sys.argv[1])):
+for i in range(int(sys.argv[2])):
   c.HeadHunter()
   c.HeadPiler()
   c.BuildFun()
