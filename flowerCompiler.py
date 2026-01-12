@@ -238,16 +238,14 @@ else:
   c.regInput(file.readlines())
 #print(c.code)
 output:str=""
-iter:int=0
 while output=="":
-  for i in range(iter):
+  for i in range(1):
     c.HeadHunter()
     c.HeadPiler()
     c.BuildFun()
     c.conFlow()
     c.r2v()
     c.cLineIdx+=1
-  iter+=1
-  output='\n'.join(c.cResultL[:-1])  
+  output='\n'.join(c.cResultL[:-1])
 output+='\n'+"main()"
 print(output)
