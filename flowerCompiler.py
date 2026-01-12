@@ -237,12 +237,15 @@ else:
   file=open(sys.argv[1],'r')
   c.regInput(file.readlines())
 #print(c.code)
-for i in range(int(sys.argv[2])):
-  c.HeadHunter()
-  c.HeadPiler()
-  c.BuildFun()
-  c.conFlow()
-  c.r2v()
-  c.cLineIdx+=1
-print('\n'.join(c.cResultL[:-1]))
-print("main()")
+output:str=""
+while output=="":
+  for i in range(int(sys.argv[2])):
+    c.HeadHunter()
+    c.HeadPiler()
+    c.BuildFun()
+    c.conFlow()
+    c.r2v()
+    c.cLineIdx+=1
+    output='\n'.join(c.cResultL[:-1])
+output+='\n'+"main()"
+print(output)
