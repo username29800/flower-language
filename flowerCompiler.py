@@ -246,7 +246,7 @@ code='''
     l=int(l)
   <<
 
-()end
+(exit)endflower
 '''
 '''
 import sys
