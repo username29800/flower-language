@@ -100,6 +100,7 @@ class flowerLang:
           #  self.cResultL.append(i)
           #self.cResultL.append(self.rConst)
           self.loader.append(self.rConst)
+          self.rConst=""
           self.isHeader=False
           self.isTail=True
           self.isOpsControlled=0
