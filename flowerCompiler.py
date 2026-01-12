@@ -166,19 +166,19 @@ class flowerLang:
   def conFlow(self):
     if "<>" in self.headL:
       ops=self.headL.index("<>")
-      self.isOpsControlled=4
+      self.isOpsControlled=2
       #print(self.headL)
       if ops in [1,2]:
         self.loader.append(" "*(self.funIndent)+f"  if {self.headL[ops+1]}:")
     if "><" in self.headL:
       ops=self.headL.index("><")
-      self.isOpsControlled=4
+      self.isOpsControlled=2
       #print(self.headL)
       if ops in [1,2]:
         self.loader.append(" "*(self.funIndent)+f"  if not{self.headL[ops+1]}:")
     if "<<" in self.headL:
       ops=self.headL.index("<<")
-      self.isOpsControlled=4
+      self.isOpsControlled=2
       #print(self.headL)
       if ops in [1,2]:
         self.loader.append(" "*(self.funIndent)+f"  while {self.headL[ops+1]}:")
