@@ -231,8 +231,11 @@ code='''
 ()end
 '''
 import sys
-file=open(sys.argv[1],'r')
-c.strInput(code)
+if sys.argv=="default-test":
+  c.strInput(code)
+else:
+  file=open(sys.argv[1],'r')
+  c.strInput(file.readlines())
 #print(c.code)
 for i in range(int(sys.argv[2])):
   c.HeadHunter()
