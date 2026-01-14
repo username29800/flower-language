@@ -89,7 +89,7 @@ class flowerLang:
           self.HeadPiler()
           self.BuildFun()
           self.conFlow()
-          print(self.isTryEnabled_P)
+          #print(self.isTryEnabled_P)
           self.r2v()
       else:
         if self.cln()[0:1]=="}":
