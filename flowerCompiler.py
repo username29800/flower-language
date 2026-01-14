@@ -10,6 +10,7 @@ class flowerLang:
   rConst:str=""
   rConst0:str=""
   isOpsControlled:int=0
+  isFunControlled:int=0
   isHeader:bool=False
   isTail:bool=False
   endflower:bool=False
@@ -77,6 +78,10 @@ class flowerLang:
           self.isHeader=True
           self.isTail=False
           self.isOpsControlled=0
+          self.HeadPiler()
+          self.BuildFun()
+          self.conFlow()
+          self.r2v()
       else:
         if self.cln()[0:1]=="}":
           for i in self.loader:
@@ -93,7 +98,7 @@ class flowerLang:
           self.funIndent=0
           self.returnVar=self.Token(self.cln(),"<")[-1].strip()
           if self.returnVar!="":
-            self.runner[-1]=f"{self.returnVar}={self.runner[-1]}"
+            self.runner[-1]=" "*self.isFunControlled+f"{self.returnVar}={self.runner[-1]}"
           #for i in range(len(self.runner)):
           #  self.runner[i]=f" {self.runner[i]}"
           #for i in self.loader:
@@ -170,29 +175,41 @@ class flowerLang:
       self.isOpsControlled=2
       #print(self.headL)
       if ops in [1,2]:
-        self.loader.append(" "*(self.funIndent)+f"  if {self.headL[ops+1]}:")
+        if self.headL[-1]=="{":
+          self.runner.append(" "*(self.funIndent)+f"if {self.headL[ops+1]}:")
+          self.isFunControlled=2
+        else:
+          self.loader.append(" "*(self.funIndent)+f"  if {self.headL[ops+1]}:")
     if "><" in self.headL:
       ops=self.headL.index("><")
       self.isOpsControlled=2
       #print(self.headL)
       if ops in [1,2]:
-        self.loader.append(" "*(self.funIndent)+f"  if not{self.headL[ops+1]}:")
+        if self.headL[-1]=="{":
+          self.runner.append(" "*(self.funIndent)+f"if not{self.headL[ops+1]}:")
+          self.isFunControlled=2
+        else:
+          self.loader.append(" "*(self.funIndent)+f"  if not{self.headL[ops+1]}:")
     if "<<" in self.headL:
       ops=self.headL.index("<<")
       self.isOpsControlled=2
       #print(self.headL)
       if ops in [1,2]:
-        self.loader.append(" "*(self.funIndent)+f"  while {self.headL[ops+1]}:")
+        if self.headL[-1]=="{":
+          self.runner.append(" "*(self.funIndent)+f"while {self.headL[ops+1]}:")
+          self.isFunControlled=2
+        else:
+          self.loader.append(" "*(self.funIndent)+f"  while {self.headL[ops+1]}:")
   def compiler(self):
     output:str=""
     file=open(sys.argv[1],'r').readlines()
     self.regInput(file)
     while self.endflower==False:
       self.HeadHunter()
-      self.HeadPiler()
-      self.BuildFun()
-      self.conFlow()
-      self.r2v()
+      #self.HeadPiler()
+      #self.BuildFun()
+      #self.conFlow()
+      #self.r2v()
       self.cLineIdx+=1
     output='\n'.join(self.cResultL[:-1])
     output+='\n'+"main()"
