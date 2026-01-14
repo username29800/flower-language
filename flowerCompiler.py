@@ -98,9 +98,10 @@ class flowerLang:
           for i in self.runner:
             self.cResultL.append(f"  {i}")
           self.cResultL.append(self.rConst0)
-          if self.isTryEnabled_P:
+          print(self.isTryEnabled_P,self.tryExpt_P)
+          if self.isTryEnabled_P==True:
             #print(self.tryExpt_P)
-            self.runner.append(" "*(self.funIndent)+f"except:\n{" "*self.funIndent}    {self.tryExpt_P}")
+            self.cResultL.append(" "*(self.funIndent)+f"except:\n{" "*self.funIndent}    {self.tryExpt_P}")
           #self.cResultL.append(self.rConst)
           self.initPilerInst()
           self.isHeader=False
@@ -175,21 +176,37 @@ class flowerLang:
       self.endflower=True
   def r2v(self): # return to value
     #print(self.headL)
-    if len(self.headL)>2:
-      if self.headL[2]==">>":
-          self.rConst="  "*int(self.isTryEnabled or self.isTryEnabled_P)+" "*self.funIndent+f"  return {self.headL[1]}({self.headL[3]})"
-      if self.headL[1]==">>":
-        self.rConst="  "*int(self.isTryEnabled or self.isTryEnabled_P)+" "*self.funIndent+f"  return {self.headL[2]}"
-    if len(self.headL)>4:
-      if self.headL[4]==">>":
-          self.rConst="  "*int(self.isTryEnabled or self.isTryEnabled_P)+" "*self.funIndent+f"  return {self.headL[1]}({self.headL[5]})"
-      if self.headL[3]==">>":
-          self.rConst="  "*int(self.isTryEnabled or self.isTryEnabled_P)+" "*self.funIndent+f"  return {self.headL[4]}"
-    if len(self.headL)<=2:
-      self.rConst=""
-      #print(self.rConst)
+    if self.headL[-1]=="{":
+      if len(self.headL)>2:
+        if self.headL[2]==">>":
+            self.rConst="  "*int(self.isTryEnabled_P)+" "*self.funIndent+f"  return {self.headL[1]}({self.headL[3]})"
+        if self.headL[1]==">>":
+          self.rConst="  "*int(self.isTryEnabled_P)+" "*self.funIndent+f"  return {self.headL[2]}"
+      if len(self.headL)>4:
+        if self.headL[4]==">>":
+            self.rConst="  "*int(self.isTryEnabled_P)+" "*self.funIndent+f"  return {self.headL[1]}({self.headL[5]})"
+        if self.headL[3]==">>":
+            self.rConst="  "*int(self.isTryEnabled_P)+" "*self.funIndent+f"  return {self.headL[4]}"
+      if len(self.headL)<=2:
+        self.rConst=""
+        #print(self.rConst)
+    else:
+      if len(self.headL)>2:
+        if self.headL[2]==">>":
+            self.rConst="  "*int(self.isTryEnabled)+" "*self.funIndent+f"  return {self.headL[1]}({self.headL[3]})"
+        if self.headL[1]==">>":
+          self.rConst="  "*int(self.isTryEnabled)+" "*self.funIndent+f"  return {self.headL[2]}"
+      if len(self.headL)>4:
+        if self.headL[4]==">>":
+            self.rConst="  "*int(self.isTryEnabled)+" "*self.funIndent+f"  return {self.headL[1]}({self.headL[5]})"
+        if self.headL[3]==">>":
+            self.rConst="  "*int(self.isTryEnabled)+" "*self.funIndent+f"  return {self.headL[4]}"
+      if len(self.headL)<=2:
+        self.rConst=""
+        #print(self.rConst)
     if self.headL[-1]=="{":
       self.rConst0=f"{self.rConst}"
+
   def conFlow(self):
     if "<>" in self.headL:
       ops=self.headL.index("<>")
