@@ -77,7 +77,7 @@ class flowerLang:
             self.headL[i]=self.headL[i].strip()
             #self.initPilerInst()
           find=0
-          if (self.headL[-1]=="{") and (len(self.fun)>0):
+          if (self.headL[-1]=="{"):
             self.initPilerInst()
             self.isFunControlled=0
             self.isTryEnabled_P=False
