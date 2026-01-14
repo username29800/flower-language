@@ -101,7 +101,7 @@ class flowerLang:
           #print(self.isTryEnabled_P,self.tryExpt_P)
           if self.isTryEnabled_P==True:
             #print(self.tryExpt_P)
-            self.cResultL.append(" "*(self.funIndent)+f"except:\n{" "*self.funIndent}    {self.tryExpt_P}")
+            self.cResultL.append(" "*(self.funIndent)+f"  except:\n{" "*self.funIndent}    {self.tryExpt_P}")
           #self.cResultL.append(self.rConst)
           self.initPilerInst()
           self.isHeader=False
