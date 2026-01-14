@@ -11,9 +11,13 @@ class flowerLang:
   rConst0:str=""
   isOpsControlled:int=0
   isFunControlled:int=0
+  isTryEnabled:bool=False
+  isTryEnabled_P:bool=False
   isHeader:bool=False
   isTail:bool=False
   endflower:bool=False
+  tryExpt:str=""
+  tryExpt_P:str=""
   def __init__(self):
     return None
   def initPilerInst(self):
@@ -76,15 +80,22 @@ class flowerLang:
           if (self.headL[-1]=="{") and (len(self.fun)>0):
             self.initPilerInst()
             self.isFunControlled=0
+            self.isTryEnabled_P=False
           self.isHeader=True
           self.isTail=False
           self.isOpsControlled=0
+          self.isTryEnabled=False
+          #self.isTryEnabled_P=False
           self.HeadPiler()
           self.BuildFun()
           self.conFlow()
+          print(self.isTryEnabled_P)
           self.r2v()
       else:
         if self.cln()[0:1]=="}":
+          if self.isTryEnabled_P:
+            #print(self.tryExpt_P)
+            self.runner.append(" "*(self.funIndent)+f"except:\n{" "*self.funIndent}    {self.tryExpt_P}")
           for i in self.loader:
             self.cResultL.append(i)
           #self.cResultL.append(self.rConst)
@@ -95,9 +106,10 @@ class flowerLang:
           self.isHeader=False
           self.isTail=True
           self.isOpsControlled=0
+          self.isTryEnabled=False
+          self.isTryEnabled_P=True
           #self.isFunControlled=0
         elif self.cln()[0:2+self.funIndent]==" "*(self.funIndent)+"<<":
-          self.funIndent=0
           self.returnVar=self.Token(self.cln(),"<")[-1].strip()
           if self.returnVar!="":
             self.runner[-1]=f"{self.returnVar}={self.runner[-1]}"
@@ -108,11 +120,15 @@ class flowerLang:
           #for i in self.loader:
           #  self.cResultL.append(i)
           #self.cResultL.append(self.rConst)
+          if self.isTryEnabled:
+            self.loader.append(" "*(self.funIndent)+f"  except:\n{" "*self.funIndent}    {self.tryExpt}")
           self.loader.append(self.rConst)
           self.rConst=""
+          self.funIndent=0
           self.isHeader=False
           self.isTail=True
           self.isOpsControlled=0
+          self.isTryEnabled=False
           #self.isFunControlled=0
         else:
           vstr=self.cln()
@@ -205,6 +221,20 @@ class flowerLang:
           self.isFunControlled=2
         else:
           self.loader.append(" "*(self.funIndent)+f"  while {self.headL[ops+1]}:")
+    if "?>" in self.headL:
+      ops=self.headL.index("?>")
+      self.isOpsControlled=2
+      #print(self.headL)
+      if ops in [1,2]:
+        if self.headL[-1]=="{":
+          self.runner.append(" "*(self.funIndent)+f"try:")
+          self.isFunControlled=2
+          self.isTryEnabled_P=True
+          self.tryExpt_P=self.headL[ops+1]
+        else:
+          self.loader.append(" "*(self.funIndent)+f"  try:")
+          self.isTryEnabled=True
+          self.tryExpt=self.headL[ops+1]
   def compiler(self):
     output:str=""
     file=open(sys.argv[1],'r').readlines()
