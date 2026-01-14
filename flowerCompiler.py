@@ -75,6 +75,7 @@ class flowerLang:
           find=0
           if (self.headL[-1]=="{") and (len(self.fun)>0):
             self.initPilerInst()
+            self.isFunControlled=0
           self.isHeader=True
           self.isTail=False
           self.isOpsControlled=0
@@ -94,11 +95,14 @@ class flowerLang:
           self.isHeader=False
           self.isTail=True
           self.isOpsControlled=0
+          #self.isFunControlled=0
         elif self.cln()[0:2+self.funIndent]==" "*(self.funIndent)+"<<":
           self.funIndent=0
           self.returnVar=self.Token(self.cln(),"<")[-1].strip()
           if self.returnVar!="":
-            self.runner[-1]=" "*self.isFunControlled+f"{self.returnVar}={self.runner[-1]}"
+            self.runner[-1]=f"{self.returnVar}={self.runner[-1]}"
+          if self.isFunControlled:
+             self.runner[-1]=" "*self.isFunControlled+self.runner[-1]
           #for i in range(len(self.runner)):
           #  self.runner[i]=f" {self.runner[i]}"
           #for i in self.loader:
@@ -109,6 +113,7 @@ class flowerLang:
           self.isHeader=False
           self.isTail=True
           self.isOpsControlled=0
+          #self.isFunControlled=0
         else:
           vstr=self.cln()
           #print(self.isHeader,self.isTail)
