@@ -93,15 +93,15 @@ class flowerLang:
           self.r2v()
       else:
         if self.cln()[0:1]=="}":
-          if self.isTryEnabled_P:
-            #print(self.tryExpt_P)
-            self.runner.append(" "*(self.funIndent)+f"except:\n{" "*self.funIndent}    {self.tryExpt_P}")
           for i in self.loader:
             self.cResultL.append(i)
-          #self.cResultL.append(self.rConst)
           for i in self.runner:
             self.cResultL.append(f"  {i}")
           self.cResultL.append(self.rConst0)
+          if self.isTryEnabled_P:
+            #print(self.tryExpt_P)
+            self.runner.append(" "*(self.funIndent)+f"except:\n{" "*self.funIndent}    {self.tryExpt_P}")
+          #self.cResultL.append(self.rConst)
           self.initPilerInst()
           self.isHeader=False
           self.isTail=True
@@ -120,9 +120,9 @@ class flowerLang:
           #for i in self.loader:
           #  self.cResultL.append(i)
           #self.cResultL.append(self.rConst)
+          self.loader.append(self.rConst)
           if self.isTryEnabled:
             self.loader.append(" "*(self.funIndent)+f"  except:\n{" "*self.funIndent}    {self.tryExpt}")
-          self.loader.append(self.rConst)
           self.rConst=""
           self.funIndent=0
           self.isHeader=False
@@ -177,14 +177,14 @@ class flowerLang:
     #print(self.headL)
     if len(self.headL)>2:
       if self.headL[2]==">>":
-          self.rConst=" "*self.funIndent+f"  return {self.headL[1]}({self.headL[3]})"
+          self.rConst="  "*int(self.isTryEnabled or self.isTryEnabled_P)+" "*self.funIndent+f"  return {self.headL[1]}({self.headL[3]})"
       if self.headL[1]==">>":
-        self.rConst=" "*self.funIndent+f"  return {self.headL[2]}"
+        self.rConst="  "*int(self.isTryEnabled or self.isTryEnabled_P)+" "*self.funIndent+f"  return {self.headL[2]}"
     if len(self.headL)>4:
       if self.headL[4]==">>":
-          self.rConst=" "*self.funIndent+f"  return {self.headL[1]}({self.headL[5]})"
+          self.rConst="  "*int(self.isTryEnabled or self.isTryEnabled_P)+" "*self.funIndent+f"  return {self.headL[1]}({self.headL[5]})"
       if self.headL[3]==">>":
-          self.rConst=" "*self.funIndent+f"  return {self.headL[4]}"
+          self.rConst="  "*int(self.isTryEnabled or self.isTryEnabled_P)+" "*self.funIndent+f"  return {self.headL[4]}"
     if len(self.headL)<=2:
       self.rConst=""
       #print(self.rConst)
