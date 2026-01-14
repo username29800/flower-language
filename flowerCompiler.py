@@ -98,7 +98,7 @@ class flowerLang:
           for i in self.runner:
             self.cResultL.append(f"  {i}")
           self.cResultL.append(self.rConst0)
-          print(self.isTryEnabled_P,self.tryExpt_P)
+          #print(self.isTryEnabled_P,self.tryExpt_P)
           if self.isTryEnabled_P==True:
             #print(self.tryExpt_P)
             self.cResultL.append(" "*(self.funIndent)+f"except:\n{" "*self.funIndent}    {self.tryExpt_P}")
