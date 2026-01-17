@@ -15,7 +15,9 @@ class flowerLang:
   isTryEnabled_P:bool=False
   isHeader:bool=False
   isTail:bool=False
+  isComment:bool=False
   endflower:bool=False
+  appendFun:bool=False
   tryExpt:str=""
   tryExpt_P:str=""
   def __init__(self):
@@ -46,15 +48,25 @@ class flowerLang:
       i=obj[idx]
       #print("char:",i)
       if i in ['"',"'"]:
-        esc=1-esc
-        #if esc==1: print("eval off")
-        #if esc==0: print("eval on")
-      if esc==0 and i==delim and not(obj[idx-1:idx+1] in [", ","  ","   "]):
+        if not self.isComment:
+          esc=1-esc
+          #if esc==1: print("eval off")
+          #if esc==0: print("eval on")
+      if esc==0 and i==delim and not(obj[idx-1:idx+1] in [", ","  "]):
         output.append(obj[idxThr:idx])
         idxThr=idx+1
         #print("saved")
+      if esc==0 and i=="#":
+        esc=1
+        self.isComment=True
+        #print(self.isComment)
     if idxThr<len(obj):
       output.append(obj[idxThr:idx+1])
+      if self.isComment:
+        del output[-1]
+      self.isComment=False
+      #print(self.isComment)
+    #print(output)
     return output
   def HeadHunter(self):
     self.head:str=""
@@ -86,6 +98,7 @@ class flowerLang:
           self.isOpsControlled=0
           self.isTryEnabled=False
           #self.isTryEnabled_P=False
+          self.appendFun=False
           self.HeadPiler()
           self.BuildFun()
           self.conFlow()
@@ -115,7 +128,10 @@ class flowerLang:
           if self.returnVar!="":
             self.runner[-1]=f"{self.returnVar}={self.runner[-1]}"
           if self.isFunControlled:
-             self.runner[-1]=" "*self.isFunControlled+self.runner[-1]
+            #print(self.headL)
+            #print(self.appendFun)
+            if not(self.appendFun):
+              self.runner[-1]=" "*self.isFunControlled+self.runner[-1]
           #for i in range(len(self.runner)):
           #  self.runner[i]=f" {self.runner[i]}"
           #for i in self.loader:
@@ -166,8 +182,9 @@ class flowerLang:
     self.funDec=" "*self.funIndent+f"def {self.funName}({self.args}):"
     self.funVar=f"{self.funName}({self.args})"
     if len(self.fun)>1:
-      self.loader.append(self.funDec)
-      self.runner.append(self.funVar)
+      if not("><" in self.headL[1:3] or "*>" in self.headL[1:3]):
+        self.loader.append(self.funDec)
+        self.runner.append(self.funVar)
     else:
       self.cResultL.append(self.funDec)
     #print(self.funDec)
@@ -193,14 +210,14 @@ class flowerLang:
     else:
       if len(self.headL)>2:
         if self.headL[2]==">>":
-            self.rConst="  "*int(self.isTryEnabled)+" "*self.funIndent+f"  return {self.headL[1]}({self.headL[3]})"
+            self.rConst="  "*int(self.isTryEnabled)+" "*self.isOpsControlled+" "*self.funIndent+f"  return {self.headL[1]}({self.headL[3]})"
         if self.headL[1]==">>":
-          self.rConst="  "*int(self.isTryEnabled)+" "*self.funIndent+f"  return {self.headL[2]}"
+          self.rConst="  "*int(self.isTryEnabled)+" "*self.isOpsControlled+" "*self.funIndent+f"  return {self.headL[2]}"
       if len(self.headL)>4:
         if self.headL[4]==">>":
-            self.rConst="  "*int(self.isTryEnabled)+" "*self.funIndent+f"  return {self.headL[1]}({self.headL[5]})"
+            self.rConst="  "*int(self.isTryEnabled)+" "*self.isOpsControlled+" "*self.funIndent+f"  return {self.headL[1]}({self.headL[5]})"
         if self.headL[3]==">>":
-            self.rConst="  "*int(self.isTryEnabled)+" "*self.funIndent+f"  return {self.headL[4]}"
+            self.rConst="  "*int(self.isTryEnabled)+" "*self.isOpsControlled+" "*self.funIndent+f"  return {self.headL[4]}"
       if len(self.headL)<=2:
         self.rConst=""
         #print(self.rConst)
@@ -219,15 +236,33 @@ class flowerLang:
         else:
           self.loader.append(" "*(self.funIndent)+f"  if {self.headL[ops+1]}:")
     if "><" in self.headL:
+      self.appendFun=True
+      #print(self.runner)
       ops=self.headL.index("><")
       self.isOpsControlled=2
       #print(self.headL)
       if ops in [1,2]:
         if self.headL[-1]=="{":
-          self.runner.append(" "*(self.funIndent)+f"if not{self.headL[ops+1]}:")
+          self.runner.append(" "*(self.funIndent)+f"elif {self.headL[ops+1]}:")
           self.isFunControlled=2
         else:
-          self.loader.append(" "*(self.funIndent)+f"  if not{self.headL[ops+1]}:")
+          self.loader.append(" "*(self.funIndent)+f"  elif {self.headL[ops+1]}:")
+    if "*>" in self.headL:
+      #print(self.headL)
+      #print(self.loader)
+      self.appendFun=True
+      #print(self.runner)
+      ops=self.headL.index("*>")
+      self.isOpsControlled=2
+      #print(self.headL)
+      if ops in [1,2]:
+        if self.headL[-1]=="{":
+          self.runner.append(" "*(self.funIndent)+f"else:")
+          self.isFunControlled=2
+          #self.rConst=self.headL[ops+1]
+        else:
+          self.loader.append(" "*(self.funIndent)+f"  else:")
+          #self.rConst=self.headL[ops+1]
     if "<<" in self.headL:
       ops=self.headL.index("<<")
       self.isOpsControlled=2

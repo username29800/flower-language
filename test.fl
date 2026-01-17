@@ -1,0 +1,13 @@
+# This is a comment
+()main << True >> 0 { # This is an inline comment
+  ()input0 input >> ""
+  << a
+  (a)f print <> a=="1" >> "Hello, world!"
+  <<
+  (a)f print >< a=="0" >> "hello world"
+  <<
+  (a)f print *> >> 0 #comment
+  <<
+}
+
+(exit)endflower
