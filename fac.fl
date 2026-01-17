@@ -1,0 +1,41 @@
+# exception-free wrapper
+()main ?> alertExpt() >> 0 {
+
+  # sub-main function
+  ()f >> 0
+    mainSeq()
+  <<
+}
+
+# the main sequence
+()mainSeq >> 0 {
+
+  # get arguments from sys.argv[]; go to typeError if any exception occurs
+
+  ()getSysArg int ?> typeError() >> arg
+    import sys
+    arg=sys.argv[1]
+    #print(arg)
+  << arg
+
+  (arg,i=1,r=1)result int << (i<=arg) >> r
+    r*=i
+    i+=1
+  << r
+
+  (r)result_v print >> r
+    print(f"the result of {arg}! is:")
+  <<
+}
+
+()typeError {
+  ()f print >> "argument must be an integer"
+  <<
+}
+
+()alertExpt {
+  ()f print >> "program terminated due to an exception"
+  <<
+}
+
+(exit)endflower

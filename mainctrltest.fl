@@ -1,4 +1,4 @@
-(i="",run=True)main << (run) {
+(i="",run=True)main << (run) >> 0 {
   ()check input ?> print("f") >> "type 'pass' to exit: "
   << i
   ()f <> i=="pass" >> False
