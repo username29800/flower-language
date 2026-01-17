@@ -2,10 +2,13 @@
   ()check input ?> print("f") >> "type 'pass' to exit: "
   << i
   ()f <> i=="pass" >> False
+    pass
   << run
   ()f >< i=="pass!" >> False
+    pass
   << run
   ()f *> True
+    pass
   << run
   ()err ?> errAlert()
     print(0+'a')
