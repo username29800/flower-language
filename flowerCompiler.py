@@ -126,7 +126,8 @@ class flowerLang:
         elif self.cln()[0:2+self.funIndent]==" "*(self.funIndent)+"<<":
           self.returnVar=self.Token(self.cln(),"<")[-1].strip()
           if self.returnVar!="":
-            self.runner[-1]=f"{self.returnVar}={self.runner[-1]}"
+            if not(self.appendFun):
+              self.runner[-1]=f"{self.returnVar}={self.runner[-1]}"
           if self.isFunControlled:
             #print(self.headL)
             #print(self.appendFun)
@@ -210,19 +211,24 @@ class flowerLang:
     else:
       if len(self.headL)>2:
         if self.headL[2]==">>":
-            self.rConst="  "*int(self.isTryEnabled)+" "*self.isOpsControlled+" "*self.funIndent+f"  return {self.headL[1]}({self.headL[3]})"
+            self.rConst="  "*(int(self.isTryEnabled)+int(self.appendFun))+" "*self.isOpsControlled+" "*self.funIndent+f"  return {self.headL[1]}({self.headL[3]})"
         if self.headL[1]==">>":
-          self.rConst="  "*int(self.isTryEnabled)+" "*self.isOpsControlled+" "*self.funIndent+f"  return {self.headL[2]}"
+          self.rConst="  "*(int(self.isTryEnabled)+int(self.appendFun))+" "*self.isOpsControlled+" "*self.funIndent+f"  return {self.headL[2]}"
       if len(self.headL)>4:
         if self.headL[4]==">>":
-            self.rConst="  "*int(self.isTryEnabled)+" "*self.isOpsControlled+" "*self.funIndent+f"  return {self.headL[1]}({self.headL[5]})"
+            self.rConst="  "*(int(self.isTryEnabled)+int(self.appendFun))+" "*self.isOpsControlled+" "*self.funIndent+f"  return {self.headL[1]}({self.headL[5]})"
         if self.headL[3]==">>":
-            self.rConst="  "*int(self.isTryEnabled)+" "*self.isOpsControlled+" "*self.funIndent+f"  return {self.headL[4]}"
+            self.rConst="  "*(int(self.isTryEnabled)+int(self.appendFun))+" "*self.isOpsControlled+" "*self.funIndent+f"  return {self.headL[4]}"
       if len(self.headL)<=2:
         self.rConst=""
         #print(self.rConst)
-    if self.headL[-1]=="{":
-      self.rConst0=f"{self.rConst}"
+    if len(self.headL)>2:
+      if self.headL[-1]=="{":
+        self.rConst0=f"{self.rConst}"
+      if self.headL[1]=="*>":
+        self.rConst="  "*(int(self.isTryEnabled)+int(self.appendFun))+" "*self.isOpsControlled+" "*self.funIndent+f"  return {self.headL[2]}"
+      elif self.headL[2]=="*>":
+        self.rConst="  "*(int(self.isTryEnabled)+int(self.appendFun))+" "*self.isOpsControlled+" "*self.funIndent+f"  return {self.headL[1]}({self.headL[3]})"
 
   def conFlow(self):
     if "<>" in self.headL:
@@ -239,7 +245,7 @@ class flowerLang:
       self.appendFun=True
       #print(self.runner)
       ops=self.headL.index("><")
-      self.isOpsControlled=2
+      #self.isOpsControlled=2
       #print(self.headL)
       if ops in [1,2]:
         if self.headL[-1]=="{":
@@ -253,7 +259,7 @@ class flowerLang:
       self.appendFun=True
       #print(self.runner)
       ops=self.headL.index("*>")
-      self.isOpsControlled=2
+      #self.isOpsControlled=2
       #print(self.headL)
       if ops in [1,2]:
         if self.headL[-1]=="{":

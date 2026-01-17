@@ -1,0 +1,20 @@
+(i="",run=True)main << (run) {
+  ()check input ?> print("f") >> "type 'pass' to exit: "
+  << i
+  ()f <> i=="pass" >> False
+  << run
+  ()f >< i=="pass!" >> False
+  << run
+  ()f *> True
+  << run
+  ()err ?> errAlert()
+    print(0+'a')
+  <<
+}
+
+()errAlert {
+  ()f print >> "An exception has occurred"
+  <<
+}
+
+(exit)endflower
